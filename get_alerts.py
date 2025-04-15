@@ -22,8 +22,10 @@ def create_ssl_context():
         ssl_context = ssl.create_default_context(cafile=certifi.where())
         
         # Optional: Add flexibility for self-signed or internal certificates
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+       # ssl_context.check_hostname = False
+       # ssl_context.verify_mode = ssl.CERT_NONE
+        ssl_context.check_hostname = True  # Enforce hostname checking
+        ssl_context.verify_mode = ssl.CERT_REQUIRED
         
         return ssl_context
     except Exception as e:
@@ -232,7 +234,7 @@ def save_alerts_to_file(alerts, base_filename=None):
         print(f"Saved {len(alerts)} alerts to {filename}")
         
         # Upload to S3
-        upload_to_s3(filename, '<BUCKET_NAME>')
+        upload_to_s3(filename, 'db-pan-bucket')
         
         return filename
     except Exception as e:
